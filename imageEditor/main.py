@@ -27,7 +27,7 @@ class imageFrame(ttk.Frame):
         self.place(relx=0,rely=0,relwidth=1,relheight=1.0)
         self.widgets()
 
-    #widgets i.3 buttons entry fields, etc.
+    #widgets i.e buttons entry fields, etc.
     def widgets(self):
         
         #open file(image) button
@@ -50,6 +50,7 @@ class imageFrame(ttk.Frame):
         cropButton = ttk.Button(self,text="CROP",command=self.crop_image)
         cropButton.place(rely=0.4,relx=0.7,relheight=0.07,relwidth=0.25)
 
+    #this label will update in realtime as changes are made by user
     def current_image_label(self,image):
         tk.Label(self, background="#2C3333" , image=image).place(relx=0.07,rely=0.07,relwidth=0.55,relheight=0.86)
 
@@ -70,11 +71,15 @@ class imageFrame(ttk.Frame):
         except AttributeError:
             pass
 
+    '''When crop button is clicked this method is called and it will also invoke ImageHandling class where cropping is done 
+    and in return cropped image is obatained both scaled down version and original 1:1 scale'''
     def crop_image(self):
         try:
+            #calling crop method
             img = ImageHandler.ImageHandling(path=self.fileName).imageCrop(self.leftCrop.get(),self.rightCrop.get(),self.topCrop.get(),self.bottomCrop.get())[0]
             img = Image.fromarray(img)
             self.croppedImageTk = ImageTk.PhotoImage(image=img)
+            #updating real time crop image
             self.current_image_label(self.croppedImageTk)
         except AttributeError:
             pass
