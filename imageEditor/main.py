@@ -35,7 +35,7 @@ class imageFrame(ttk.Frame):
         openImageButton.place(relx=0.7,rely=0.07,relheight=0.07,relwidth=0.25)
         
         #crop widget fields
-        ttk.Label(self,text="Crop image enter values in pixels",font=("arial",8),foreground="white",background="#2C3333").place(relx=0.7,rely=0.15,relwidth=0.25,relheight=0.07)
+        ttk.Label(self,text="Crop image enter values in pixels",font=("arial",9),foreground="white",background="#2C3333").place(relx=0.7,rely=0.15,relwidth=0.25,relheight=0.07)
             #crop entry fields
         self.leftCrop = tk.IntVar()
         self.rightCrop = tk.IntVar()
@@ -49,6 +49,17 @@ class imageFrame(ttk.Frame):
         #crop submit button
         cropButton = ttk.Button(self,text="CROP",command=self.crop_image)
         cropButton.place(rely=0.4,relx=0.7,relheight=0.07,relwidth=0.25)
+
+
+        #image blending
+        ttk.Label(self,text="select another image to blend",font=("arial",9),foreground="white",background="#2C3333").place(relx=0.7,rely=0.45,relwidth=0.25,relheight=0.07)
+        openBlendingImage = ttk.Button(self,text="Open blending Image",command=self.blending_image)
+        openBlendingImage.place(relx=0.7,rely=0.52,relheight=0.07,relwidth=0.25)
+
+
+        #reset button: this will reset image label
+        resetButton = ttk.Button(self,text="RESET",command=self.reset_label)
+        resetButton.place(relx=0.7,rely=0.9,relheight=0.07,relwidth=0.25)
 
     #this label will update in realtime as changes are made by user
     def current_image_label(self,image):
@@ -83,7 +94,26 @@ class imageFrame(ttk.Frame):
             self.current_image_label(self.croppedImageTk)
         except AttributeError:
             pass
-        
 
+    #reset lebel function
+    def reset_label(self):
+        img = ImageHandler.ImageHandling(path=self.fileName).imageReturn()[0]
+        img = Image.fromarray(img)
+        self.imgreset = ImageTk.PhotoImage(image=img)
+        self.current_image_label(self.imgreset)
+
+    def blending_image(self):
+        fileTypeSupported = [("Image files","*.png *.jpg *.jpeg")]
+        self.fileNameblend = filedialog.askopenfilename(title="Open Photo to blend",initialdir="/",filetypes=fileTypeSupported)
+        try:
+            img2 = ImageHandler.ImageHandling(path=self.fileName).imageBlend(self.fileNameblend,0.3)[0]
+            print(img2)
+            img2 = Image.fromarray(img2)
+            self.imgTkBlended = ImageTk.PhotoImage(image=img2)
+            #now update image label
+            self.current_image_label(self.imgTkBlended)
+            
+        except AttributeError:
+            pass
 
 mainWindow()

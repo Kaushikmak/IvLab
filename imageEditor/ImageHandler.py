@@ -32,6 +32,31 @@ class ImageHandling():
         except ValueError:
             pass
 
+    
+    def imageBlend(self,imagePath2,weight):
+        try:
+            image1 = plt.imread(self.path)
+            image2 = plt.imread(imagePath2)
+            #making both images of equall shape
+            imageShape1 = image1.shape
+            imageShape2 = image2.shape
+            desiredShape = (max(image1[0],image2[0]),max(image1[1],image2[1]))
+            print(imageShape1)
+            print(imageShape2)
+            
+            print(desiredShape)
+            image1 = image1.reshape(desiredShape)
+            image2 = image2.reshape(desiredShape)
+
+            blendedImage = image1*weight + image2*(1-weight)
+            blendedImage = np.clip(blendedImage,0,255)
+            return [blendedImage[::5,::5,:],blendedImage]
+            pass
+        except FileNotFoundError:
+            pass
+
+
+
 
     
 
