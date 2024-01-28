@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import ttk, filedialog, TclError
 from PIL import Image, ImageTk
 import ImageHandler
 
@@ -92,7 +92,7 @@ class imageFrame(ttk.Frame):
             self.croppedImageTk = ImageTk.PhotoImage(image=img)
             #updating real time crop image
             self.current_image_label(self.croppedImageTk)
-        except AttributeError:
+        except (TclError,AttributeError):
             pass
 
     #reset lebel function
