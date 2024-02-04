@@ -55,6 +55,23 @@ class imageFrame(ttk.Frame):
         ttk.Label(self,text="select another image to blend",font=("arial",9),foreground="white",background="#2C3333").place(relx=0.7,rely=0.45,relwidth=0.25,relheight=0.07)
         openBlendingImage = ttk.Button(self,text="Open blending Image",command=self.blending_image)
         openBlendingImage.place(relx=0.7,rely=0.52,relheight=0.07,relwidth=0.25)
+        #image blending weight
+        self.weight = tk.DoubleVar()
+        ttk.Entry(self,textvariable=self.weight).place(relx=0.8,rely=0.6,relheight=0.05,relwidth=0.15)
+        ttk.Label(self,text="Weight of\nfirst image",background="#2C3333",font=("arial",9),foreground="white").place(relx=0.7,rely=0.6,relheight=0.05,relwidth=0.1)
+        #image blending button
+        blendButton = ttk.Button(self,text="BLEND IMAGES !",command=self.Blend)
+        blendButton.place(relx=0.7,rely=0.67,relheight=0.05,relwidth=0.25)
+
+        #image rotation scale
+        ttk.Label(self,text="Rotate image !",background="#2C3333",font=("arial",9),foreground="white").place(relx=0.7,rely=0.73,relwidth=0.25)
+        def scalevalue(event):
+            print(rotationScale.get())
+        self.ScaleVariable = tk.DoubleVar()
+        rotationScale = ttk.Scale(self,variable=self.ScaleVariable,from_=-360,to=360,orient="horizontal",command=scalevalue)
+        rotationScale.set(0)
+        rotationScale.place(relx=0.7,rely=0.75,relwidth=0.25)
+        
 
 
         #reset button: this will reset image label
@@ -97,23 +114,31 @@ class imageFrame(ttk.Frame):
 
     #reset lebel function
     def reset_label(self):
-        img = ImageHandler.ImageHandling(path=self.fileName).imageReturn()[0]
-        img = Image.fromarray(img)
-        self.imgreset = ImageTk.PhotoImage(image=img)
-        self.current_image_label(self.imgreset)
+        try:
+            img = ImageHandler.ImageHandling(path=self.fileName).imageReturn()[0]
+            img = Image.fromarray(img)
+            self.imgreset = ImageTk.PhotoImage(image=img)
+            self.current_image_label(self.imgreset)
+        except AttributeError:
+            pass
 
     def blending_image(self):
         fileTypeSupported = [("Image files","*.png *.jpg *.jpeg")]
         self.fileNameblend = filedialog.askopenfilename(title="Open Photo to blend",initialdir="/",filetypes=fileTypeSupported)
         try:
-            img2 = ImageHandler.ImageHandling(path=self.fileName).imageBlend(self.fileNameblend,0.3)[0]
-            print(img2)
-            img2 = Image.fromarray(img2)
-            self.imgTkBlended = ImageTk.PhotoImage(image=img2)
-            #now update image label
-            self.current_image_label(self.imgTkBlended)
+            #calling ImageHandler module and sending image's location which is to be blended
+            ImageHandler.ImageHandling(path=self.fileNameblend).imageToBeBlend(self.fileNameblend)
             
         except AttributeError:
+            pass
+
+    def Blend(self):
+        try:
+            img = ImageHandler.ImageHandling(path=self.fileName).imageBlend(self.weight.get())[0]
+            img = Image.fromarray(img)
+            self.blendedImage = ImageTk.PhotoImage(image=img)
+            self.current_image_label(self.blendedImage)
+        except (TclError,AttributeError):
             pass
 
 mainWindow()
