@@ -37,9 +37,6 @@ class ImageHandling():
         global imageToBlend
         imageToBlend = plt.imread(imagepath2)
         
-        
-
-    
     def imageBlend(self,weight):
         try:
             image1 = plt.imread(self.path)
@@ -55,10 +52,39 @@ class ImageHandling():
             blendedImage = image1*weight + image2*(1-weight)
             
             return [blendedImage[::5,::5,:].astype(np.uint8),blendedImage.astype(np.uint8)]
-        except FileNotFoundError:
+        except (FileNotFoundError, NameError):
             pass
 
+    
+    def rotationOfImage(self,angle):
+        
+        image = self.imageReturn()[1]
 
+        angle = angle * (np.pi/80)
+        sincosMatrix = np.transpose(np.array([[np.cos(angle),-np.sin(angle)],
+                                                [np.sin(angle),np.cos(angle)]]))
+        a =  image.shape[0]
+        b = image.shape[1]
+        
+        startPointX =  0
+        startPointY = 0
+        
+        rotatedImage = np.zeros(image.shape,dtype='u1') 
+        for height in range(a):
+            for width in range(b):
+                xyMatrix = np.array([[width-startPointX],[height-startPointY]])
+                rotatedMatrix = np.dot(sincosMatrix,xyMatrix)
+                xModified = startPointX + int(rotatedMatrix[0])
+                yModified = startPointY + int(rotatedMatrix[1])
+                print("working:")
+                if (0<=xModified<=b-1) and (0<=yModified<=a-1): 
+                    rotatedImage[yModified,xModified] = image[height,width]
+
+        print("done")
+      
+        return [rotatedImage[::5,::5,:].astype(np.uint8),rotatedImage.astype(np.uint8)]
+
+        
 
 
     

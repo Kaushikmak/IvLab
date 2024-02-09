@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, TclError
 from PIL import Image, ImageTk
 import ImageHandler
+import time
 
 
 #main window class for UI
@@ -64,15 +65,10 @@ class imageFrame(ttk.Frame):
         blendButton.place(relx=0.7,rely=0.67,relheight=0.05,relwidth=0.25)
 
         #image rotation scale
-        ttk.Label(self,text="Rotate image !",background="#2C3333",font=("arial",9),foreground="white").place(relx=0.7,rely=0.73,relwidth=0.25)
-        def scalevalue(event):
-            print(rotationScale.get())
+        ttk.Label(self,text="Rotate image !\nEnter angel to rotate image",background="#2C3333",font=("arial",9),foreground="white").place(relx=0.7,rely=0.73,relwidth=0.25)
         self.ScaleVariable = tk.DoubleVar()
-        rotationScale = ttk.Scale(self,variable=self.ScaleVariable,from_=-360,to=360,orient="horizontal",command=scalevalue)
-        rotationScale.set(0)
-        rotationScale.place(relx=0.7,rely=0.75,relwidth=0.25)
-        
-
+        ttk.Entry(self,textvariable=self.ScaleVariable).place(relx=0.7,rely=0.78,relwidth=0.1,relheight=0.05)
+        ttk.Button(text="ROTATE",command=self.RotateImage).place(relx=0.85,rely=0.78,relwidth=0.1,relheight=0.05)
 
         #reset button: this will reset image label
         resetButton = ttk.Button(self,text="RESET",command=self.reset_label)
@@ -82,12 +78,14 @@ class imageFrame(ttk.Frame):
     def current_image_label(self,image):
         tk.Label(self, background="#2C3333" , image=image).place(relx=0.07,rely=0.07,relwidth=0.55,relheight=0.86)
 
+
     #open image function when open file button is pressed
     def open_image(self):
         #defining file types supported
+        global rotImage
         fileTypeSupported = [("Image files","*.png *.jpg *.jpeg")]
         self.fileName = filedialog.askopenfilename(title="Open Photo",initialdir="/",filetypes=fileTypeSupported)
-
+        rotImage = self.fileName
         try:
             #calling ImageHandler module
             img = ImageHandler.ImageHandling(path=self.fileName).imageReturn()[0]
@@ -138,7 +136,21 @@ class imageFrame(ttk.Frame):
             img = Image.fromarray(img)
             self.blendedImage = ImageTk.PhotoImage(image=img)
             self.current_image_label(self.blendedImage)
-        except (TclError,AttributeError):
+        except (TclError,AttributeError,TypeError):
+            pass
+
+  
+
+    def RotateImage(self):
+        try:
+           
+            angle = self.ScaleVariable.get()
+            img = ImageHandler.ImageHandling(rotImage).rotationOfImage(angle)[0]
+            img = Image.fromarray(img)
+            self.resetImage = ImageTk.PhotoImage(image=img)
+            self.current_image_label(self.resetImage)
+            
+        except (TypeError,AttributeError,NameError):
             pass
 
 mainWindow()
