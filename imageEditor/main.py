@@ -70,6 +70,12 @@ class imageFrame(ttk.Frame):
         ttk.Entry(self,textvariable=self.ScaleVariable).place(relx=0.7,rely=0.78,relwidth=0.1,relheight=0.05)
         ttk.Button(text="ROTATE",command=self.RotateImage).place(relx=0.85,rely=0.78,relwidth=0.1,relheight=0.05)
 
+        #image blur
+        ttk.Label(self,text="blur\nImage",background="#2C3333",font=("arial",9),foreground="white").place(relx=0.7,rely=0.84,relwidth=0.25)
+        self.blurVariable = tk.IntVar()
+        ttk.Entry(self,textvariable=self.blurVariable).place(relx=0.75,rely=0.84,relwidth=0.08,relheight=0.05)
+        ttk.Button(text="Blur",command=self.BlurImage).place(relx=0.85,rely=0.84,relwidth=0.1,relheight=0.05)
+
         #reset button: this will reset image label
         resetButton = ttk.Button(self,text="RESET",command=self.reset_label)
         resetButton.place(relx=0.7,rely=0.9,relheight=0.07,relwidth=0.25)
@@ -151,6 +157,16 @@ class imageFrame(ttk.Frame):
             self.current_image_label(self.resetImage)
             
         except (TypeError,AttributeError,NameError):
+            pass
+
+    def BlurImage(self):
+        try:
+            blur = self.blurVariable.get()*10
+            img = ImageHandler.ImageHandling(rotImage).blurImage(blur)[0]
+            img = Image.fromarray(img)
+            self.resetImage = ImageTk.PhotoImage(image=img)
+            self.current_image_label(self.resetImage)
+        except (TypeError, AttributeError, NameError):
             pass
 
 mainWindow()

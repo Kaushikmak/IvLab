@@ -76,15 +76,42 @@ class ImageHandling():
                 rotatedMatrix = np.dot(sincosMatrix,xyMatrix)
                 xModified = startPointX + int(rotatedMatrix[0])
                 yModified = startPointY + int(rotatedMatrix[1])
-                print("working:")
+                print("working . . .")
                 if (0<=xModified<=b-1) and (0<=yModified<=a-1): 
                     rotatedImage[yModified,xModified] = image[height,width]
 
         print("done")
       
         return [rotatedImage[::5,::5,:].astype(np.uint8),rotatedImage.astype(np.uint8)]
+    
+    def blurImage(self,blur_intensity):
 
+        image = self.imageReturn()[1]
+        channels = image.shape[2]
+
+        #kernel matrix
+        kernel_size = blur_intensity
+        kernel = np.ones((kernel_size, kernel_size)) / (kernel_size * kernel_size)
+    
+        height, width = image.shape[:2]
         
+        #borders
+        pad = kernel_size // 2
+        padded_image = np.pad(image, ((pad, pad), (pad, pad), (0, 0) if channels == 3 else (0, 0)), mode='edge')
+    
+        output_image = np.zeros((height, width, channels), dtype=np.uint8)
+        
+        #convolution
+        for c in range(channels):
+            for i in range(height):
+                for j in range(width):
+                    roi = padded_image[i:i+kernel_size, j:j+kernel_size, c]
+                    output_image[i, j, c] = np.sum(roi * kernel)
+                    print(f"working . . .")
+
+        print("DONE!!")
+        return [output_image[::5,::5,:].astype(np.uint8),output_image.astype(np.uint8)]
+
 
 
     
