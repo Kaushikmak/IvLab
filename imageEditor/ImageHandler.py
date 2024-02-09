@@ -55,7 +55,7 @@ class ImageHandling():
         except (FileNotFoundError, NameError):
             pass
 
-    
+    #rotate image
     def rotationOfImage(self,angle):
         
         image = self.imageReturn()[1]
@@ -68,7 +68,7 @@ class ImageHandling():
         
         startPointX =  0
         startPointY = 0
-        
+        #rotate image from defined matrix of sin and cos
         rotatedImage = np.zeros(image.shape,dtype='u1') 
         for height in range(a):
             for width in range(b):
