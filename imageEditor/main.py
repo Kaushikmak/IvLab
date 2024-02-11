@@ -25,6 +25,7 @@ class imageFrame(ttk.Frame):
     def __init__(self,mother):
         super().__init__(mother)
         ttk.Label(self,background="#2C3333").pack(expand=True,fill="both")
+        ttk.Label(self,text="Note: All functions are built using numpy and custom module\nSome functions like rotate and blur may take some time to acomplish\nPlease be patience",background="#2C3333",foreground="white",font=("arial",12)).place(relx=0.2,rely=0,relwidth=0.6)
         self.place(relx=0,rely=0,relwidth=1,relheight=1.0)
         self.widgets()
 
@@ -83,6 +84,7 @@ class imageFrame(ttk.Frame):
     #this label will update in realtime as changes are made by user
     def current_image_label(self,image):
         tk.Label(self, background="#2C3333" , image=image).place(relx=0.07,rely=0.07,relwidth=0.55,relheight=0.86)
+        
 
 
     #open image function when open file button is pressed
