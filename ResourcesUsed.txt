@@ -1,3 +1,5 @@
 https://www.youtube.com/watch?v=KuXjwB4LzSA
 
 https://medium.com/@sasasulakshi/opencv-image-histogram-calculations-4c5e736f85e
+https://medium.com/mlearning-ai/color-shape-and-texture-feature-extraction-using-opencv-cb1feb2dbd73
+https://docs.opencv.org/3.4/dd/d49/tutorial_py_contour_features.html
