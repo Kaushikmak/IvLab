@@ -32,11 +32,10 @@ class vectorfeature:
             for j in range(len(allDistances[i])):
                 if (allDistances[i][j] <= chiThreshold):
                     indexesReq.append([i,j])
-        print(indexesReq)
+        #show all images which lies within threshold
         for i in range(len(indexesReq)):
             folderIndex = indexesReq[i][0]
             imageIndex = indexesReq[i][1]
-            print(folderIndex,imageIndex)
             cv2.imshow("Images Matched",allImages[folderIndex][imageIndex])
             cv2.waitKey(0)
 
