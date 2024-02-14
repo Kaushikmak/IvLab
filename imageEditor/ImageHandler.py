@@ -60,7 +60,7 @@ class ImageHandling():
         
         image = self.imageReturn()[1]
 
-        angle = angle * (np.pi/80)
+        angle = angle * (np.pi/180)
         sincosMatrix = np.transpose(np.array([[np.cos(angle),-np.sin(angle)],
                                                 [np.sin(angle),np.cos(angle)]]))
         a =  image.shape[0]
